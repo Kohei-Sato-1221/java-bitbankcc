@@ -12,7 +12,8 @@ public enum CurrencyPair {
     MONA_JPY("mona_jpy"),
     MONA_BTC("mona_btc"),
     BCC_JPY("bcc_jpy"),
-    BCC_BTC("bcc_btc");
+    BCC_BTC("bcc_btc"),
+    ETH_JPY("eth_jpy");
 
     private final String pair;
 

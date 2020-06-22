@@ -6,9 +6,9 @@
 
     <groupId>cc.bitbank</groupId>
     <artifactId>java-bitbankcc</artifactId>
-    <version>1.1.0</version>
-    <description>Java library for bitbank.cc</description>
-    <url>https://github.com/bitbankinc/java-bitbankcc</url>
+    <version>sugarbitbank-0.9.9</version>
+    <description>Java library Wrapper of bitbank.cc(from ver1.10)</description>
+    <url>https://github.com/Kohei-Sato-1221/java-bitbankcc</url>
 
     <licenses>
         <license>

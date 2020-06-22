@@ -38,6 +38,7 @@ import cc.bitbank.entity.Depth;
 import cc.bitbank.entity.Order;
 import cc.bitbank.entity.Orders;
 import cc.bitbank.entity.Ticker;
+import cc.bitbank.entity.Trades;
 import cc.bitbank.entity.Transactions;
 import cc.bitbank.entity.Withdraw;
 import cc.bitbank.entity.enums.CandleType;
@@ -53,6 +54,7 @@ import cc.bitbank.entity.response.AssetsResponse;
 import cc.bitbank.entity.response.CandlestickResponse;
 import cc.bitbank.entity.response.DepthResponse;
 import cc.bitbank.entity.response.ErrorCodeResponse;
+import cc.bitbank.entity.response.HistoriesResponse;
 import cc.bitbank.entity.response.OrderResponse;
 import cc.bitbank.entity.response.OrdersResponse;
 import cc.bitbank.entity.response.Response;
@@ -246,12 +248,29 @@ public class Bitbankcc {
     }
 
     public Orders getOrders(CurrencyPair pair, long[] orderIds) throws BitbankException, IOException {
-        String path = "/v1/user/spot/orders_info";
-        URIBuilder builder = getPrivateUriBuilder(path);
+    	String path = "/v1/user/spot/orders_info";
+    	URIBuilder builder = getPrivateUriBuilder(path);
+    	
+    	String json = new CancelsBody(pair, orderIds).toJson();
+    	StringEntity entity = new StringEntity(json);
+    	OrdersResponse result = doHttpPost(builder, OrdersResponse.class, getPrivateRequestHeader(json), entity);
+    	return result.data;
+    }
+    
+    public Trades getHistory(CurrencyPair pair, long since) throws BitbankException, IOException {
+        String path = "/v1/user/spot/trade_history";
 
-        String json = new CancelsBody(pair, orderIds).toJson();
-        StringEntity entity = new StringEntity(json);
-        OrdersResponse result = doHttpPost(builder, OrdersResponse.class, getPrivateRequestHeader(json), entity);
+        List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+        if(pair != null) {
+        	nameValuePair.add(new BasicNameValuePair("pair", pair.getCode()));        	
+        }
+        if(since > 0) {
+        	nameValuePair.add(new BasicNameValuePair("since", "" + since));
+//        	nameValuePair.add(new BasicNameValuePair("since", "" + (new Date().getTime()/1000)));
+        }
+        
+        URIBuilder builder = getPrivateUriBuilder(path).setParameters(nameValuePair);
+        HistoriesResponse result = doHttpGet(builder, HistoriesResponse.class, getPrivateRequestHeader(path, nameValuePair));
         return result.data;
     }
 
